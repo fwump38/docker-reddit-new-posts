@@ -22,7 +22,7 @@ SUBREDDIT = os.environ.get('SUBREDDIT')
 
 # Settings for PRAW
 CLIENT_ID = os.environ.get('CLIENT_ID')
-CLIENT_SECRET = os.environ.get('CLIET_SECRET')
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
 user_agent = 'python:submission_feed:{} (by /u/fwump38)'.format(__version__)
 
 # Slack Details
