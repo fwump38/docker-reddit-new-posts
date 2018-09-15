@@ -17,10 +17,6 @@ RUN pip install -r /home/fwump38/requirements.txt
 ADD ./scriptpython/submissions.py /home/fwump38/submissions.py
 RUN chmod +x /home/fwump38/submissions.py
 
-# Add shell script and grant execution rights
-ADD ./scriptpython/scriptpython.sh /home/fwump38/scriptpython.sh
-RUN chmod +x /home/fwump38/scriptpython.sh
-
 # Give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/simple-cron
 
