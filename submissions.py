@@ -98,7 +98,7 @@ def check_subreddit():
 			# Build slack message
 			payload={
 				'attachments': [build_attachment(submission)],
-				'channel': '#{}'.format(CHANNNEL)
+				'channel': '#{}'.format(CHANNEL)
 			}
 			# Send the response to the webhook
 			response = requests.post(WEBHOOK, json=payload)
