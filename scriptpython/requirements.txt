@@ -1,4 +1,2 @@
 requests==2.19.1
 praw
-python-dotenv
-dotenv

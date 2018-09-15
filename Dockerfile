@@ -1,17 +1,12 @@
-FROM ubuntu:latest
+FROM python:3
 
 MAINTAINER David Mirch fwump38@gmail.com
 
 # Install cron
 RUN apt-get update
 RUN apt-get install -y -q \
-        git  cron nano \
+        git cron nano \
         build-essential \
-        python \
-        python-yaml \
-        python-dev \
-        python-setuptools \
-        python-pip \
     && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* libssl-dev openssl
 
