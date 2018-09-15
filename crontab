@@ -1,3 +1,4 @@
+PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 #change time to execute script
 * * * * * root /home/fwump38/scriptpython.sh
 # An empty line is required at the end of this file for a valid cron file.
