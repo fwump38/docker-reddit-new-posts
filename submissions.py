@@ -47,7 +47,7 @@ def build_attachment(submission):
 	comments = submission.num_comments
 	reports = submission.num_reports
 	url = submission.url
-	permalink = 'https://www.reddit.com{0}'.format((submission.permalink).encode('utf-8'))
+	permalink = 'https://www.reddit.com{0}'.format((submission.permalink))
 	
 	if submission.selftext != '':
 		text = submission.selftext[:130]
@@ -55,13 +55,13 @@ def build_attachment(submission):
 		text = ''
 
 	attachment = {
-		'fallback':title.encode('utf-8'),
+		'fallback':'{}'.format(title),
 		'color':'#36a64f',
-		'title':title.encode('utf-8'),
+		'title':'{}'.format(title),
 		'title_link':permalink,
 		'author_name':author,
 		'author_link':author_link,
-		'text':text.encode('utf-8'),
+		'text':'{}'.format(text),
 		'fields':[  
 				  {  
 					 'title':'Flair',
@@ -70,7 +70,7 @@ def build_attachment(submission):
 				  },
 				  {  
 					 'title':'url',
-					 'value':url.encode('utf-8'),
+					 'value':'{}'.format(url),
 					 'short':'false'
 				  }
 		],
@@ -93,7 +93,7 @@ def check_subreddit():
 	for submission in sub.new(limit=10):
 		# Check if it's been created in the last minute
 		if submission.created_utc >= start_epoch:
-			logger.info('New post detected! Title: {}'.format(submission.title.encode('utf-8')))
+			logger.info('New post detected! Title: {}'.format(submission.title))
 			# Build slack message
 			payload={
 				'attachments': [build_attachment(submission)],
