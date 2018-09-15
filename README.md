@@ -6,7 +6,7 @@ A docker to monitor a subreddit for new posts and post them to a Slack channel
 scriptpython/
 ├── requirements.txt     (requirements for python)
 ├── scriptpython.sh      (command to cron execute)
-└── test.py              (command python that execute scriptpython.sh)
+└── submissions.py              (command python that execute scriptpython.sh)
 ```
 
 Modify to set date time to execute

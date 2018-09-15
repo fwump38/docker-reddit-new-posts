@@ -24,8 +24,9 @@ RUN mkdir /home/fwump38
 ADD ./scriptpython/requirements.txt /home/fwump38/requirements.txt
 #Update python requeriments
 RUN pip install -r /home/fwump38/requirements.txt
-#Add python script to docker container
+#Add python script to docker container and grant execution rights
 ADD ./scriptpython/submissions.py /home/fwump38/submissions.py
+RUN chmod +x /home/fwump38/submissions.py
 
 # Add shell script and grant execution rights
 ADD ./scriptpython/scriptpython.sh /home/fwump38/scriptpython.sh

@@ -83,9 +83,7 @@ def build_attachment(submission):
 ###################
 
 # Create a Reddit Instance for PRAW
-reddit = praw.Reddit(client_id=CLIENT_ID,
-					 client_secret=CLIENT_SECRET,
-					 user_agent=user_agent)
+reddit = praw.Reddit(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, user_agent=user_agent)
 
 # Set start time
 start_epoch = time.time() - 60 # 1 minute ago
@@ -95,9 +93,11 @@ subreddit_obj = reddit.subreddit(SUBREDDIT)
 
 processed = []
 # Get the 20 most recent posts
+print('Getting the latest 20 submissions from {}'.format(SUBREDDIT))
 for submission in subreddit_obj.new(limit=20):
 	# Check if it's been created since the script was last run
 	if submission.created_utc >= start_epoch:
+		print('New post detected! Creating Slack message for {}'.format(submission.title))
 		# Build slack message
 		payload={
 			'attachments': [build_attachment(submission)],
@@ -106,3 +106,5 @@ for submission in subreddit_obj.new(limit=20):
 
 		# Send the response to the webhook
 		response = requests.post(WEBHOOK, json=payload)
+
+print('Completed checking for posts')
