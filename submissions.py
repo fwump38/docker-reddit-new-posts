@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Reddit New Post Bot 
+Reddit New Post Bot sy
 
 '''
 __author__ = '/u/fwump38'
 __version__ = '2.0.0'
 
 import os
-import json
 import time
+import logging
+# non-standard
 import praw
 import requests
 
@@ -17,17 +18,19 @@ import requests
 ## Config
 ###################
 
-# Subreddit
-SUBREDDIT = os.environ.get('SUBREDDIT')
-
 # Settings for PRAW
 CLIENT_ID = os.environ.get('CLIENT_ID')
 CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
-user_agent = 'python:submission_feed:{} (by /u/fwump38)'.format(__version__)
+user_agent = 'python3:submission_feed bot:{} (by /u/fwump38)'.format(__version__)
+SUBREDDIT = os.environ.get('SUBREDDIT')
 
-# Slack Details
+# Settings for Slack
 WEBHOOK = os.environ.get('WEBHOOK')
 CHANNEL = os.environ.get('CHANNEL', 'submission_feed')
+
+# Setup Logging
+logger = logging.getLogger()
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 ###################
 ## Functions
@@ -77,34 +80,46 @@ def build_attachment(submission):
 	}
 	return attachment
 
+def check_subreddit():
+	logger.info('Checking {}'.format(SUBREDDIT))
+	
+	# Set start time
+	start_epoch = time.time() - 60 # 1 minute ago
+
+	# Create a subreddit instance
+	sub = reddit.subreddit(SUBREDDIT)
+
+	# Get the 10 most recent posts
+	logger.info('Getting the latest 10 submissions')
+	for submission in sub.new(limit=10):
+		# Check if it's been created in the last minute
+		if submission.created_utc >= start_epoch:
+			logger.info('New post detected! Title: {}'.format(submission.title.encode('utf-8')))
+			# Build slack message
+			payload={
+				'attachments': [build_attachment(submission)],
+				'channel': '#{}'.format(CHANNNEL)
+			}
+			# Send the response to the webhook
+			response = requests.post(WEBHOOK, json=payload)
+
+def main():
+	while True:
+		try:
+			check_subreddit()
+		except Exception as e:
+			logger.error('Issue checking {}: {}'.format(sub_name, e))
+		logging.info('Sleeping...')
+		time.sleep(60)
 
 ###################
 ## Main
 ###################
 
-# Create a Reddit Instance for PRAW
-reddit = praw.Reddit(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, user_agent=user_agent)
+if __name__ == '__main__':
 
-# Set start time
-start_epoch = time.time() - 60 # 1 minute ago
+	# Create a Reddit Instance for PRAW
+	reddit = praw.Reddit(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, user_agent=user_agent)
 
-# Create a subreddit instance
-subreddit_obj = reddit.subreddit(SUBREDDIT)
-
-processed = []
-# Get the 20 most recent posts
-print('Getting the latest 20 submissions from {}'.format(SUBREDDIT))
-for submission in subreddit_obj.new(limit=20):
-	# Check if it's been created since the script was last run
-	if submission.created_utc >= start_epoch:
-		print('New post detected! Creating Slack message for {}'.format(submission.title))
-		# Build slack message
-		payload={
-			'attachments': [build_attachment(submission)],
-			'channel': '#{}'.format(CHANNEL)
-		}
-
-		# Send the response to the webhook
-		response = requests.post(WEBHOOK, json=payload)
-
-print('Completed checking for posts')
+	# Start Loop
+	main()
