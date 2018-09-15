@@ -3,23 +3,12 @@ FROM python:3
 MAINTAINER David Mirch fwump38@gmail.com
 
 # Install cron
-RUN apt-get update
-RUN apt-get install -y -q \
-        git cron nano \
-        build-essential \
-    && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* libssl-dev openssl
-
-#install pip
-RUN easy_install -U setuptools && \
-    pip install -U pip && \
-    pip install --upgrade pip 
-
+RUN apt-get update && apt-get -y install -qq --force-yes cron
 
 # Add crontab file in the cron directory
 ADD crontab /etc/cron.d/simple-cron
 
-
+# Setup script directory
 RUN mkdir /home/fwump38
 ADD ./scriptpython/requirements.txt /home/fwump38/requirements.txt
 #Update python requeriments
@@ -39,4 +28,4 @@ RUN chmod 0644 /etc/cron.d/simple-cron
 RUN touch /var/log/cron.log
 
 # Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
+CMD ["cron", "-f"]

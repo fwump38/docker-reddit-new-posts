@@ -1,12 +1,16 @@
 # Reddit New Post Feed
 A docker to monitor a subreddit for new posts and post them to a Slack channel
 
+## Configuration
+
+* You need a Reddit account that can use the Reddit API. See the [PRAW Quick Start Guide](https://praw.readthedocs.io/en/latest/getting_started/quick_start.html) for details.
+* Slack Team with an [Incoming Webhook](https://api.slack.com/incoming-webhooks) configured
+
 ## Setup
 ```
 scriptpython/
 ├── requirements.txt     (requirements for python)
-├── scriptpython.sh      (command to cron execute)
-└── submissions.py              (command python that execute scriptpython.sh)
+└── submissions.py              (script that checks for new posts)
 ```
 
 Modify to set date time to execute
@@ -33,7 +37,7 @@ docker run -t -i -d \
   -e SUBREDDIT=askscience \
   -e WEBHOOK=xxxxxx \
   -e CHANNEL=new_posts \
-  fwump38/docker-reddit-new-posts:latest
+  fwump38/reddit-new-posts:latest
 ```
 
 ### Parameters
