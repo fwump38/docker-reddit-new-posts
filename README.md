@@ -1,12 +1,14 @@
-PARA PODER USAR 
-You need to get next folder skell
-scriptpyhton/
-├── requirements.txt     (requeriments for python)
-├── scriptpython.sh      (commando to cron execute)
-└── test.py              (comand python that execute scriptpython.sh)
+# Reddit New Post Feed
+A docker to monitor a subreddit for new posts and post them to a Slack channel
+
+## Setup
+scriptpython/
+├── requirements.txt     (requirements for python)
+├── scriptpython.sh      (command to cron execute)
+└── test.py              (command python that execute scriptpython.sh)
 
 Modify to set date time to execute
-* * * * *  /home/fersacom/scriptpython.sh
+* * * * *  /home/fwump38/scriptpython.sh
  ┬ ┬ ┬ ┬ ┬
  │ │ │ │ │
  │ │ │ │ │
@@ -16,15 +18,26 @@ Modify to set date time to execute
  │ └──────────────────── hour (0 - 23)
  └───────────────────────── min (0 - 59)
 
+## Usage
 
+Quick Setup:
 
-1º GET PULL FROM IMAGE
-docker pull jopo79/dockercronpython
+```shell
+docker run -t -i -d \
+  -e CLIENT_ID=xxxxxxx \
+  -e CLIENT_SECRET=xxxxxxx \
+  -e SUBREDDIT=askscience \
+  -e WEBHOOK=xxxxxx \
+  -e CHANNEL=new_posts \
+  fwump38/docker-reddit-new-posts:latest
+```
 
-2º RUN WITH VARIABLES 
-docker run -t -i -d  jopo79/dockercronpython:latest
+### Parameters
 
-EXAMPLE PASSING ENV VARIABLES TO CONTAINER
-
-docker run -t -i -d  -e "PASSWORD=password" -e "EMAIL=email" jopo79/dockercronpython:latest
+* `--restart=always` - ensure the container restarts automatically after host reboot.
+* `-e CLIENT_ID` - The Client ID of the Reddit Bot that will be checking for new posts. **Required**
+* `-e CLIENT_SECRET` - The Client Secret of the Reddit Bot that will be checkig for new posts. **Required**
+* `-e SUBREDDIT` - The name of the subreddit to monitor (has not been tested with high volume subreddits). **Required**
+* `-e WEBHOOK` - The Slack incoming webhook that is used to write new posts to a Slack channel . **Required**
+* `-e CHANNEL` - The Slack to write to. Default is submission_feed.
 

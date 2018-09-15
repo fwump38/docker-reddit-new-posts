@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-MAINTAINER Javier Fernandez javier.fernandez@fersacom.es
+MAINTAINER David Mirch fwump38@gmail.com
 
 # Install cron
 RUN apt-get update
@@ -25,16 +25,16 @@ RUN easy_install -U setuptools && \
 ADD crontab /etc/cron.d/simple-cron
 
 
-RUN mkdir /home/fersacom
-ADD ./scriptpython/requirements.txt /home/fersacom/requirements.txt
+RUN mkdir /home/fwump38
+ADD ./scriptpython/requirements.txt /home/fwump38/requirements.txt
 #Update python requeriments
-RUN pip install -r /home/fersacom/requirements.txt
+RUN pip install -r /home/fwump38/requirements.txt
 #Add python script to docker container
-ADD ./scriptpython/test.py /home/fersacom/test.py
+ADD ./scriptpython/submissions.py /home/fwump38/submissions.py
 
 # Add shell script and grant execution rights
-ADD ./scriptpython/scriptpython.sh /home/fersacom/scriptpython.sh
-RUN chmod +x /home/fersacom/scriptpython.sh
+ADD ./scriptpython/scriptpython.sh /home/fwump38/scriptpython.sh
+RUN chmod +x /home/fwump38/scriptpython.sh
 
 # Give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/simple-cron
