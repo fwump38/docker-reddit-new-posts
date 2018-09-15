@@ -5,7 +5,7 @@ Reddit New Post Bot sy
 
 '''
 __author__ = '/u/fwump38'
-__version__ = '2.0.0'
+__version__ = '1.0.0'
 
 import os
 import time
@@ -108,7 +108,7 @@ def main():
 		try:
 			check_subreddit()
 		except Exception as e:
-			logger.error('Issue checking {}: {}'.format(sub_name, e))
+			logger.error('Issue checking subreddit: {}'.format(e))
 		logging.info('Sleeping...')
 		time.sleep(60)
 
